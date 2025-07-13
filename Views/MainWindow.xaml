@@ -4,9 +4,171 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RfemApplication"
+        xmlns:converters="clr-namespace:RfemApplication.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="RFEM Application" Height="650" Width="900">
+
+    <Window.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBoolConverter"/>
+        <converters:ConnectionStatusToColorConverter x:Key="StatusToColorConverter"/>
+        <converters:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter"/>
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="MinWidth" Value="100"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="3"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- RFEM Connection Panel -->
+        <GroupBox Grid.Row="0" Header="Połączenie z RFEM" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Server URL -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Adres serwera:" VerticalAlignment="Center" Margin="5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding RfemConnectionViewModel.ServerUrl}" 
+                         IsEnabled="{Binding RfemConnectionViewModel.IsConnecting, Converter={StaticResource InverseBoolConverter}}"
+                         Margin="5"/>
+
+                <!-- Buttons -->
+                <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                    <Button Content="Test" Command="{Binding RfemConnectionViewModel.TestConnectionCommand}" Margin="2"/>
+                    <Button Content="Połącz" Command="{Binding RfemConnectionViewModel.ConnectCommand}" Margin="2"/>
+                    <Button Content="Rozłącz" Command="{Binding RfemConnectionViewModel.DisconnectCommand}" Margin="2"/>
+                </StackPanel>
+
+                <!-- Status -->
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Status:" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
+                           Text="{Binding RfemConnectionViewModel.ConnectionStatus}" 
+                           Margin="5">
+                    <TextBlock.Foreground>
+                        <MultiBinding Converter="{StaticResource StatusToColorConverter}">
+                            <Binding Path="RfemConnectionViewModel.IsConnected"/>
+                            <Binding Path="RfemConnectionViewModel.IsConnecting"/>
+                        </MultiBinding>
+                    </TextBlock.Foreground>
+                    <TextBlock.FontWeight>
+                        <Binding Path="RfemConnectionViewModel.IsConnected" 
+                                 Converter="{StaticResource BoolToFontWeightConverter}"/>
+                    </TextBlock.FontWeight>
+                </TextBlock>
+
+                <!-- Error Message -->
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Błąd:" VerticalAlignment="Top" Margin="5"
+                           Visibility="{Binding RfemConnectionViewModel.LastError, Converter={StaticResource StringToVisibilityConverter}}"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" 
+                           Text="{Binding RfemConnectionViewModel.LastError}" 
+                           Foreground="Red" TextWrapping="Wrap" Margin="5"
+                           Visibility="{Binding RfemConnectionViewModel.LastError, Converter={StaticResource StringToVisibilityConverter}}"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- People Management -->
+            <GroupBox Grid.Column="0" Header="Zarządzanie danymi" Margin="0,0,5,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Search Panel -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Szukaj:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                                 Width="200" Margin="0,0,10,0"/>
+                        <Button Content="Odśwież" Command="{Binding RefreshCommand}" Margin="0,0,5,0"/>
+                        <Button Content="Zaznacz wszystkie" Command="{Binding SelectAllCommand}"/>
+                    </StackPanel>
+
+                    <!-- Loading Overlay -->
+                    <Border Grid.Row="1" Background="LightGray" Opacity="0.8" 
+                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Panel.ZIndex="10">
+                        <TextBlock Text="Ładowanie..." HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                   FontSize="16" FontWeight="Bold"/>
+                    </Border>
+
+                    <!-- Data Grid -->
+                    <DataGrid Grid.Row="1" 
+                              ItemsSource="{Binding FilteredPeople}"
+                              SelectedItem="{Binding SelectedPerson}"
+                              AutoGenerateColumns="False"
+                              Margin="5"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column"
+                              AlternatingRowBackground="LightGray"
+                              CanUserDeleteRows="False"
+                              CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Header="Zaznacz" Width="60"/>
+                            <DataGridTextColumn Binding="{Binding FirstName}" Header="Imię" Width="120"/>
+                            <DataGridTextColumn Binding="{Binding LastName}" Header="Nazwisko" Width="120"/>
+                            <DataGridTextColumn Binding="{Binding Age}" Header="Wiek" Width="60"/>
+                            <DataGridTextColumn Binding="{Binding FullName}" Header="Pełne imię" Width="*" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </GroupBox>
+
+            <!-- Action Panel -->
+            <GroupBox Grid.Column="1" Header="Akcje" MinWidth="180">
+                <StackPanel Margin="5">
+                    <Button Content="Dodaj osobę" Command="{Binding AddPersonCommand}"/>
+                    <Button Content="Usuń osobę" Command="{Binding DeletePersonCommand}"/>
+
+                    <Separator Margin="0,10"/>
+
+                    <Button Content="Info o RFEM" Command="{Binding RfemConnectionViewModel.ShowApplicationInfoCommand}"/>
+
+                    <TextBlock Text="Informacje o aplikacji:" FontWeight="Bold" Margin="0,10,0,5"/>
+                    <TextBlock Text="{Binding RfemConnectionViewModel.ApplicationInfo}" 
+                               TextWrapping="Wrap" FontSize="10" Foreground="Gray"/>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock Text="{Binding FilteredPeople.Count, StringFormat='Liczba osób: {0}'}"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="{Binding RfemConnectionViewModel.ConnectionStatus}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Forms;
 
 namespace RfemApplication.Services
 {
@@ -126,12 +125,12 @@ namespace RfemApplication.Services
 
         public string ShowFolderBrowserDialog(string title = "Wybierz folder")
         {
-            var dialog = new FolderBrowserDialog
+            var dialog = new System.Windows.Forms.FolderBrowserDialog
             {
                 Description = title
             };
 
-            return dialog.ShowDialog() == DialogResult.OK ? dialog.SelectedPath : null;
+            return dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK ? dialog.SelectedPath : null;
         }
     }
 }
