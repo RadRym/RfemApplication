@@ -1,7 +1,6 @@
 ﻿using System.Windows;
-using RfemApp.ViewModels;
 using RfemApplication.Services;
-using RfemApplication.ViewModels;
+using RfemApp.ViewModels; // Poprawny namespace dla MainViewModel
 
 namespace RfemApplication
 {
@@ -15,8 +14,10 @@ namespace RfemApplication
             ConfigureServices();
 
             // Utworzenie głównego okna z ViewModelem
-            var mainWindow = new MainWindow();
-            mainWindow.DataContext = new MainViewModel();
+            var mainWindow = new MainWindow
+            {
+                DataContext = new MainViewModel()
+            };
             mainWindow.Show();
         }
 
@@ -26,6 +27,7 @@ namespace RfemApplication
             ServiceLocator.Instance.RegisterSingleton<IDialogService>(new DialogService());
             ServiceLocator.Instance.RegisterSingleton<IRfemConnectionService>(new RfemConnectionService());
             ServiceLocator.Instance.RegisterSingleton<IEventAggregator>(new EventAggregator());
+            ServiceLocator.Instance.RegisterSingleton<IRfemServerManager>(new RfemServerManager());
         }
     }
 }

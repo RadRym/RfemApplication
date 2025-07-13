@@ -1,9 +1,13 @@
 E:\Portfolio\RfemApplication\obj\Debug\RfemApplication.csproj.AssemblyReference.cache
+E:\Portfolio\RfemApplication\obj\Debug\Views\ElementsDataGridView.g.cs
 E:\Portfolio\RfemApplication\obj\Debug\Views\MainWindow.g.cs
 E:\Portfolio\RfemApplication\obj\Debug\App.g.cs
 E:\Portfolio\RfemApplication\obj\Debug\GeneratedInternalTypeHelper.g.cs
 E:\Portfolio\RfemApplication\obj\Debug\RfemApplication_MarkupCompile.cache
 E:\Portfolio\RfemApplication\obj\Debug\RfemApplication_MarkupCompile.lref
+E:\Portfolio\RfemApplication\obj\Debug\Views\ElementsDataGridView.baml
+E:\Portfolio\RfemApplication\obj\Debug\RfemApplication.exe
+E:\Portfolio\RfemApplication\obj\Debug\RfemApplication.pdb
 E:\Portfolio\RfemApplication\bin\Debug\RfemApplication.exe.config
 E:\Portfolio\RfemApplication\bin\Debug\RfemApplication.exe
 E:\Portfolio\RfemApplication\bin\Debug\RfemApplication.pdb
@@ -18,5 +22,3 @@ E:\Portfolio\RfemApplication\obj\Debug\RfemApplication.Properties.Resources.reso
 E:\Portfolio\RfemApplication\obj\Debug\RfemApplication.csproj.GenerateResource.cache
 E:\Portfolio\RfemApplication\obj\Debug\RfemApplication.csproj.CoreCompileInputs.cache
 E:\Portfolio\RfemApplication\obj\Debug\RfemAppl.CB643F9D.Up2Date
-E:\Portfolio\RfemApplication\obj\Debug\RfemApplication.exe
-E:\Portfolio\RfemApplication\obj\Debug\RfemApplication.pdb

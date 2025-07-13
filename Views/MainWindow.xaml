@@ -6,37 +6,139 @@
         xmlns:local="clr-namespace:RfemApplication"
         xmlns:converters="clr-namespace:RfemApplication.Converters"
         mc:Ignorable="d"
-        Title="RFEM Application" Height="650" Width="900">
+        Title="RFEM Application - Analiza Konstrukcji" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
+        <!-- Converters -->
         <converters:InverseBooleanConverter x:Key="InverseBoolConverter"/>
         <converters:ConnectionStatusToColorConverter x:Key="StatusToColorConverter"/>
         <converters:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter"/>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
+        <converters:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
 
+        <!-- Global Styles -->
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MinWidth" Value="75"/>
         </Style>
 
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="2"/>
-            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="#F8F9FA">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <!-- RFEM Server Management -->
             <RowDefinition Height="Auto"/>
+            <!-- RFEM WebService Connection -->
+            <RowDefinition Height="*"/>
+            <!-- Main Content -->
+            <RowDefinition Height="Auto"/>
+            <!-- Status Bar -->
         </Grid.RowDefinitions>
 
-        <!-- RFEM Connection Panel -->
-        <GroupBox Grid.Row="0" Header="Połączenie z RFEM" Margin="10">
+        <!-- RFEM Server Management Panel -->
+        <GroupBox Grid.Row="0" Header="🖥 Zarządzanie RFEM Server" Margin="10,10,10,5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Server Path and Browse -->
+                <Grid Grid.Row="0" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Ścieżka RFEM:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBox Grid.Column="1" Text="{Binding RfemServerViewModel.ServerExecutablePath}" 
+                             IsEnabled="{Binding RfemServerViewModel.IsStarting, Converter={StaticResource InverseBoolConverter}}"/>
+                    <Button Grid.Column="2" Content="📁" Command="{Binding RfemServerViewModel.BrowseServerPathCommand}" 
+                            Width="30" Margin="5,0,0,0" ToolTip="Przeglądaj"/>
+                </Grid>
+
+                <!-- Server Configuration -->
+                <Grid Grid.Row="1" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Email:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox Grid.Column="1" Text="{Binding RfemServerViewModel.Email}" Margin="0,0,10,0"/>
+
+                    <TextBlock Grid.Column="2" Text="Hasło:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <PasswordBox Grid.Column="3" x:Name="PasswordBox" Margin="0,0,10,0"/>
+
+                    <TextBlock Grid.Column="4" Text="Licencja:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox Grid.Column="5" Text="{Binding RfemServerViewModel.License}" Margin="0,0,10,0"/>
+
+                    <TextBlock Grid.Column="6" Text="Port:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox Grid.Column="7" Text="{Binding RfemServerViewModel.SoapPort}"/>
+
+                    <CheckBox Grid.Column="8" IsChecked="{Binding RfemServerViewModel.UseGuiMode}" 
+                              Content="Tryb GUI" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                </Grid>
+
+                <!-- Server Control and Status -->
+                <Grid Grid.Row="2" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Content="🚀 Uruchom Server" Command="{Binding RfemServerViewModel.StartServerCommand}" 
+                            Background="#28A745" Foreground="White" Margin="0,0,10,0" Padding="12,6" MinWidth="140"/>
+                    <Button Grid.Column="1" Content="⏹ Zatrzymaj" Command="{Binding RfemServerViewModel.StopServerCommand}" 
+                            Background="#DC3545" Foreground="White" Margin="0,0,10,0" Padding="12,6" MinWidth="100"/>
+                    <Button Grid.Column="2" Content="🔄 Odśwież" Command="{Binding RfemServerViewModel.RefreshStatusCommand}" 
+                            Background="#6C757D" Foreground="White" Margin="0,0,15,0" Padding="10,6"/>
+
+                    <TextBlock Grid.Column="3" Text="Status:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,5,0"/>
+                    <TextBlock Grid.Column="4" Text="{Binding RfemServerViewModel.ServerStatus}" 
+                               VerticalAlignment="Center" FontWeight="Bold">
+                        <TextBlock.Foreground>
+                            <Binding Path="RfemServerViewModel.IsServerRunning" 
+                                     Converter="{StaticResource BooleanToColorConverter}"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <!-- RFEM WebService Connection Panel -->
+        <GroupBox Grid.Row="1" Header="🔗 Połączenie z RFEM WebService" Margin="10,5,10,5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -50,124 +152,268 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Server URL -->
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Adres serwera:" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Adres:" VerticalAlignment="Center" Margin="5,0,10,0"/>
                 <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding RfemConnectionViewModel.ServerUrl}" 
                          IsEnabled="{Binding RfemConnectionViewModel.IsConnecting, Converter={StaticResource InverseBoolConverter}}"
-                         Margin="5"/>
+                         Margin="0,0,10,0"/>
 
-                <!-- Buttons -->
+                <!-- Connection Buttons -->
                 <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-                    <Button Content="Test" Command="{Binding RfemConnectionViewModel.TestConnectionCommand}" Margin="2"/>
-                    <Button Content="Połącz" Command="{Binding RfemConnectionViewModel.ConnectCommand}" Margin="2"/>
-                    <Button Content="Rozłącz" Command="{Binding RfemConnectionViewModel.DisconnectCommand}" Margin="2"/>
+                    <Button Content="🔍 Test" Command="{Binding RfemConnectionViewModel.TestConnectionCommand}" 
+                            Background="#17A2B8" Foreground="White" Margin="0,0,5,0" Padding="15,5" MinWidth="70"/>
+                    <Button Content="🔌 Połącz" Command="{Binding RfemConnectionViewModel.ConnectCommand}" 
+                            Background="#007BFF" Foreground="White" Margin="0,0,5,0" Padding="15,5" MinWidth="80"/>
+                    <Button Content="❌ Rozłącz" Command="{Binding RfemConnectionViewModel.DisconnectCommand}" 
+                            Background="#FD7E14" Foreground="White" Padding="15,5" MinWidth="80"/>
                 </StackPanel>
 
                 <!-- Status -->
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Status:" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Status:" VerticalAlignment="Center" Margin="5,5,10,0"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
                            Text="{Binding RfemConnectionViewModel.ConnectionStatus}" 
-                           Margin="5">
+                           Margin="0,5,5,0" FontWeight="Bold">
                     <TextBlock.Foreground>
                         <MultiBinding Converter="{StaticResource StatusToColorConverter}">
                             <Binding Path="RfemConnectionViewModel.IsConnected"/>
                             <Binding Path="RfemConnectionViewModel.IsConnecting"/>
                         </MultiBinding>
                     </TextBlock.Foreground>
-                    <TextBlock.FontWeight>
-                        <Binding Path="RfemConnectionViewModel.IsConnected" 
-                                 Converter="{StaticResource BoolToFontWeightConverter}"/>
-                    </TextBlock.FontWeight>
                 </TextBlock>
 
                 <!-- Error Message -->
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Błąd:" VerticalAlignment="Top" Margin="5"
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Błąd:" VerticalAlignment="Top" Margin="5,5,10,5"
                            Visibility="{Binding RfemConnectionViewModel.LastError, Converter={StaticResource StringToVisibilityConverter}}"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" 
                            Text="{Binding RfemConnectionViewModel.LastError}" 
-                           Foreground="Red" TextWrapping="Wrap" Margin="5"
+                           Foreground="Red" TextWrapping="Wrap" Margin="0,5,5,5"
                            Visibility="{Binding RfemConnectionViewModel.LastError, Converter={StaticResource StringToVisibilityConverter}}"/>
             </Grid>
         </GroupBox>
 
         <!-- Main Content Area -->
-        <Grid Grid.Row="1" Margin="10">
+        <Grid Grid.Row="2" Margin="10,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="220"/>
             </Grid.ColumnDefinitions>
 
-            <!-- People Management -->
-            <GroupBox Grid.Column="0" Header="Zarządzanie danymi" Margin="0,0,5,0">
+            <!-- Elements Data Grid (Inline instead of UserControl) -->
+            <GroupBox Grid.Column="0" Header="📊 Elementy konstrukcyjne" Margin="0,0,5,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Search Panel -->
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
-                        <TextBlock Text="Szukaj:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
-                                 Width="200" Margin="0,0,10,0"/>
-                        <Button Content="Odśwież" Command="{Binding RefreshCommand}" Margin="0,0,5,0"/>
-                        <Button Content="Zaznacz wszystkie" Command="{Binding SelectAllCommand}"/>
-                    </StackPanel>
+                    <!-- Search and Actions Panel -->
+                    <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="#DEE2E6" BorderThickness="0,0,0,1" Padding="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                    <!-- Loading Overlay -->
-                    <Border Grid.Row="1" Background="LightGray" Opacity="0.8" 
-                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                            Panel.ZIndex="10">
-                        <TextBlock Text="Ładowanie..." HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                   FontSize="16" FontWeight="Bold"/>
+                            <!-- Search Panel -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <TextBlock Text="🔍" FontSize="16" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Text="Szukaj:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold"/>
+                                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                                         Width="250" Margin="0,0,15,0" 
+                                         ToolTip="Szukaj po ID, materiale, przekroju, typie elementu..."
+                                         Padding="8,5"/>
+                                <TextBlock Text="{Binding FilteredElements.Count, StringFormat='Znaleziono: {0} elementów', Mode=OneWay}" 
+                                           VerticalAlignment="Center" FontStyle="Italic" Foreground="#6C757D"/>
+                            </StackPanel>
+
+                            <!-- Action Buttons -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button Content="🔄 Odśwież" Command="{Binding RefreshCommand}" 
+                                        Margin="0,0,8,0" Padding="12,6" Background="#6C757D" Foreground="White"/>
+                                <Button Content="✓ Zaznacz wszystkie" Command="{Binding SelectAllCommand}" 
+                                        Margin="0,0,8,0" Padding="12,6" Background="#28A745" Foreground="White"/>
+                                <Button Content="📥 Pobierz z RFEM" Command="{Binding LoadFromRfemCommand}" 
+                                        Background="#007BFF" Foreground="White" Padding="12,6"
+                                        ToolTip="Pobierz elementy z aktywnego modelu RFEM"/>
+                            </StackPanel>
+                        </Grid>
                     </Border>
 
-                    <!-- Data Grid -->
-                    <DataGrid Grid.Row="1" 
-                              ItemsSource="{Binding FilteredPeople}"
-                              SelectedItem="{Binding SelectedPerson}"
-                              AutoGenerateColumns="False"
-                              Margin="5"
-                              GridLinesVisibility="Horizontal"
-                              HeadersVisibility="Column"
-                              AlternatingRowBackground="LightGray"
-                              CanUserDeleteRows="False"
-                              CanUserAddRows="False">
-                        <DataGrid.Columns>
-                            <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Header="Zaznacz" Width="60"/>
-                            <DataGridTextColumn Binding="{Binding FirstName}" Header="Imię" Width="120"/>
-                            <DataGridTextColumn Binding="{Binding LastName}" Header="Nazwisko" Width="120"/>
-                            <DataGridTextColumn Binding="{Binding Age}" Header="Wiek" Width="60"/>
-                            <DataGridTextColumn Binding="{Binding FullName}" Header="Pełne imię" Width="*" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <!-- Data Grid with Loading Overlay -->
+                    <Grid Grid.Row="1">
+                        <!-- Loading Overlay -->
+                        <Border Background="White" Opacity="0.9" 
+                                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Panel.ZIndex="10">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                <TextBlock Text="Ładowanie danych..." HorizontalAlignment="Center"
+                                           FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock Text="Pobieranie elementów z modelu RFEM..." HorizontalAlignment="Center"
+                                           FontSize="14" Foreground="#6C757D"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Main Data Grid -->
+                        <DataGrid ItemsSource="{Binding FilteredElements}"
+                                  SelectedItem="{Binding SelectedElement}"
+                                  AutoGenerateColumns="False"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  AlternatingRowBackground="#F0F8FF"
+                                  CanUserDeleteRows="False"
+                                  CanUserAddRows="False"
+                                  SelectionMode="Single"
+                                  RowHeaderWidth="0"
+                                  Margin="0">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Header="✓" Width="40"/>
+                                <DataGridTextColumn Binding="{Binding ID}" Header="ID" Width="60"/>
+                                <DataGridTextColumn Binding="{Binding ElementType}" Header="Typ" Width="80"/>
+                                <DataGridTextColumn Binding="{Binding Length, StringFormat={}{0:F2} m}" Header="Długość" Width="85"/>
+                                <DataGridTextColumn Binding="{Binding CrossSection}" Header="Przekrój" Width="120"/>
+                                <DataGridTextColumn Binding="{Binding Material}" Header="Materiał" Width="80"/>
+                                <DataGridTextColumn Binding="{Binding NodeConnection}" Header="Węzły" Width="100"/>
+                                <DataGridTextColumn Binding="{Binding LoadCase}" Header="Przypadek" Width="140"/>
+                                <DataGridTextColumn Binding="{Binding AxialForce, StringFormat={}{0:F1} kN}" Header="N [kN]" Width="80"/>
+                                <DataGridTextColumn Binding="{Binding ShearForce, StringFormat={}{0:F1} kN}" Header="V [kN]" Width="80"/>
+                                <DataGridTextColumn Binding="{Binding BendingMoment, StringFormat={}{0:F1} kNm}" Header="M [kNm]" Width="90"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
                 </Grid>
             </GroupBox>
 
             <!-- Action Panel -->
-            <GroupBox Grid.Column="1" Header="Akcje" MinWidth="180">
-                <StackPanel Margin="5">
-                    <Button Content="Dodaj osobę" Command="{Binding AddPersonCommand}"/>
-                    <Button Content="Usuń osobę" Command="{Binding DeletePersonCommand}"/>
+            <GroupBox Grid.Column="1" Header="⚙ Panel akcji">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="5">
+                        <!-- Element Actions -->
+                        <TextBlock Text="Zarządzanie elementami:" FontWeight="Bold" Margin="0,0,0,5"/>
+                        <Button Content="➕ Dodaj element" Command="{Binding AddElementCommand}" Background="#28A745" Foreground="White"/>
+                        <Button Content="🗑 Usuń element" Command="{Binding DeleteElementCommand}" Background="#DC3545" Foreground="White"/>
 
-                    <Separator Margin="0,10"/>
+                        <Separator Margin="0,10"/>
 
-                    <Button Content="Info o RFEM" Command="{Binding RfemConnectionViewModel.ShowApplicationInfoCommand}"/>
+                        <!-- RFEM Actions -->
+                        <TextBlock Text="Akcje RFEM:" FontWeight="Bold" Margin="0,0,0,5"/>
+                        <Button Content="ℹ Info o RFEM" Command="{Binding RfemConnectionViewModel.ShowApplicationInfoCommand}" 
+                                Background="#17A2B8" Foreground="White"/>
 
-                    <TextBlock Text="Informacje o aplikacji:" FontWeight="Bold" Margin="0,10,0,5"/>
-                    <TextBlock Text="{Binding RfemConnectionViewModel.ApplicationInfo}" 
-                               TextWrapping="Wrap" FontSize="10" Foreground="Gray"/>
-                </StackPanel>
+                        <Separator Margin="0,10"/>
+
+                        <!-- Model Information -->
+                        <TextBlock Text="Informacje o modelu:" FontWeight="Bold" Margin="0,5,0,5"/>
+                        <Border BorderBrush="#DEE2E6" BorderThickness="1" Padding="8" Background="#F8F9FA">
+                            <StackPanel>
+                                <TextBlock Text="{Binding FilteredElements.Count, StringFormat='Elementów: {0}', Mode=OneWay}" 
+                                           Margin="0,2" FontSize="12"/>
+                                <TextBlock Text="{Binding RfemConnectionViewModel.ApplicationInfo}" 
+                                           TextWrapping="Wrap" FontSize="10" Foreground="Gray" Margin="0,2"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Separator Margin="0,10"/>
+
+                        <!-- Selected Element Details -->
+                        <TextBlock Text="Wybrany element:" FontWeight="Bold" Margin="0,5,0,5"/>
+
+                        <!-- When Element is Selected -->
+                        <Border BorderBrush="#007BFF" BorderThickness="2" Padding="8" Margin="0,2" Background="#E3F2FD">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedElement, Converter={StaticResource NullToBooleanConverter}}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel>
+                                <TextBlock Text="{Binding SelectedElement.Description}" 
+                                           TextWrapping="Wrap" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                                <TextBlock Text="{Binding SelectedElement.NodeConnection, StringFormat='Węzły: {0}'}" 
+                                           FontSize="10" Margin="0,1"/>
+                                <TextBlock Text="{Binding SelectedElement.Length, StringFormat='Długość: {0:F2} m'}" 
+                                           FontSize="10" Margin="0,1"/>
+                                <TextBlock Text="{Binding SelectedElement.LoadCase, StringFormat='Przypadek: {0}'}" 
+                                           FontSize="10" Margin="0,1"/>
+                                <Separator Margin="0,4"/>
+                                <TextBlock Text="Siły wewnętrzne:" FontWeight="Bold" FontSize="10" Margin="0,2"/>
+                                <TextBlock Text="{Binding SelectedElement.ForcesSummary}" 
+                                           TextWrapping="Wrap" FontSize="10" Foreground="#1976D2" 
+                                           Margin="0,1,0,0" FontFamily="Consolas"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- When No Element Selected -->
+                        <Border BorderBrush="#6C757D" BorderThickness="1" Padding="8" Margin="0,2" Background="#F8F9FA">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedElement, Converter={StaticResource NullToBooleanConverter}}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="Brak zaznaczonego elementu" 
+                                       FontStyle="Italic" Foreground="#6C757D" FontSize="11" 
+                                       HorizontalAlignment="Center"/>
+                        </Border>
+
+                        <Separator Margin="0,10"/>
+
+                        <!-- Quick Stats -->
+                        <TextBlock Text="Statystyki:" FontWeight="Bold" Margin="0,5,0,5"/>
+                        <Border BorderBrush="#28A745" BorderThickness="1" Padding="6" Background="#E8F5E8">
+                            <StackPanel>
+                                <TextBlock FontSize="10" Margin="0,1">
+                                    <Run Text="Belki: "/>
+                                    <Run Text="{Binding Elements.Count, Mode=OneWay}" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock FontSize="10" Margin="0,1">
+                                    <Run Text="Słupy: "/>
+                                    <Run Text="0" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock FontSize="10" Margin="0,1">
+                                    <Run Text="Kraty: "/>
+                                    <Run Text="0" FontWeight="Bold"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
             </GroupBox>
         </Grid>
 
         <!-- Status Bar -->
-        <StatusBar Grid.Row="2">
+        <StatusBar Grid.Row="3" Background="#343A40" Foreground="White">
             <StatusBarItem>
-                <TextBlock Text="{Binding FilteredPeople.Count, StringFormat='Liczba osób: {0}'}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📊" Margin="5,0"/>
+                    <TextBlock Text="{Binding FilteredElements.Count, StringFormat='Elementów: {0}', Mode=OneWay}"/>
+                </StackPanel>
             </StatusBarItem>
-            <Separator/>
+            <Separator Background="#6C757D"/>
             <StatusBarItem>
-                <TextBlock Text="{Binding RfemConnectionViewModel.ConnectionStatus}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🔗" Margin="5,0"/>
+                    <TextBlock Text="{Binding RfemConnectionViewModel.ConnectionStatus, Mode=OneWay}"/>
+                </StackPanel>
+            </StatusBarItem>
+            <Separator Background="#6C757D"/>
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🖥" Margin="5,0"/>
+                    <TextBlock Text="{Binding RfemServerViewModel.ServerStatus, Mode=OneWay}"/>
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="RFEM Application v1.0" FontStyle="Italic" Margin="10,0"/>
+                </StackPanel>
             </StatusBarItem>
         </StatusBar>
     </Grid>

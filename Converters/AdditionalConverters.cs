@@ -157,4 +157,71 @@ namespace RfemApplication.Converters
     {
         // Dziedziczy całą funkcjonalność z BooleanToVisibilityConverter
     }
+
+    // Converter bool do koloru z konfigurowalnymi kolorami
+    public class BooleanToColorConverter : IValueConverter
+    {
+        public Brush TrueColor { get; set; } = Brushes.Green;
+        public Brush FalseColor { get; set; } = Brushes.Red;
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool boolValue)
+            {
+                return boolValue ? TrueColor : FalseColor;
+            }
+            return FalseColor;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    // Converter do sprawdzania czy wartość jest ujemna
+    public class IsNegativeConverter : IValueConverter
+    {
+        public static readonly IsNegativeConverter Instance = new IsNegativeConverter();
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is double doubleValue)
+                return doubleValue < 0;
+            if (value is int intValue)
+                return intValue < 0;
+            if (value is float floatValue)
+                return floatValue < 0;
+
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    // Converter do sprawdzania czy wartość jest dodatnia
+    public class IsPositiveConverter : IValueConverter
+    {
+        public static readonly IsPositiveConverter Instance = new IsPositiveConverter();
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is double doubleValue)
+                return doubleValue > 0;
+            if (value is int intValue)
+                return intValue > 0;
+            if (value is float floatValue)
+                return floatValue > 0;
+
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

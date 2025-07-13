@@ -69,15 +69,21 @@
     </ApplicationDefinition>
     <Compile Include="Converters\AdditionalConverters.cs" />
     <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\RfemElement.cs" />
     <Compile Include="Services\DialogServices.cs" />
     <Compile Include="Services\EventAggregator.cs" />
     <Compile Include="Services\RfemConnectionService.cs" />
+    <Compile Include="Services\RfemServerManager.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\Commands\AsyncRelayCommand.cs" />
     <Compile Include="ViewModels\Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\RfemConnectionViewModel .cs" />
+    <Page Include="Views\ElementsDataGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,6 +91,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\RfemServerViewModel.cs" />
+    <Compile Include="Views\ElementsDataGridView.xaml.cs">
+      <DependentUpon>ElementsDataGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

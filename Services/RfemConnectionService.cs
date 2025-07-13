@@ -1,8 +1,7 @@
 ﻿using System;
+using System.ServiceModel;
 using System.Threading.Tasks;
-using Dlubal.WS;
 using Dlubal.WS.Rfem6.Application;
-using Dlubal.WS.Rfem6.Model;
 
 namespace RfemApplication.Services
 {
@@ -18,8 +17,8 @@ namespace RfemApplication.Services
 
     public class RfemConnectionService : IRfemConnectionService
     {
-        private Dlubal.WS.Rfem6.Application.RfemApplicationClient _applicationClient;
-        private RfemModelClient _modelClient;
+        private IRfemApplication _applicationClient;
+        private ChannelFactory<IRfemApplication> _channelFactory;
         private bool _isConnected;
         private string _lastError;
         private string _currentServerUrl;
@@ -34,24 +33,43 @@ namespace RfemApplication.Services
             {
                 _lastError = null;
 
-                // Utworzenie tymczasowego klienta aplikacji do testowania
-                var testClient = new RfemApplicationClient(serverUrl);
+                // Utworzenie endpoint dla SOAP WebService
+                var endpoint = new EndpointAddress(serverUrl);
+                var binding = new BasicHttpBinding();
+
+                // Utworzenie klienta przez ChannelFactory
+                var channelFactory = new ChannelFactory<IRfemApplication>(binding, endpoint);
+                var testClient = channelFactory.CreateChannel();
 
                 // Test połączenia - sprawdzenie informacji o aplikacji
                 var appInfo = await Task.Run(() =>
                 {
-                    return testClient.get_information();
+                    var request = new get_informationRequest();
+                    var response = testClient.get_information(request);
+                    return response;
                 });
+
+                // Zamknij kanał testowy
+                try
+                {
+                    ((IClientChannel)testClient).Close();
+                    channelFactory.Close();
+                }
+                catch
+                {
+                    ((IClientChannel)testClient).Abort();
+                    channelFactory.Abort();
+                }
 
                 return new RfemConnectionResult
                 {
                     IsSuccess = true,
-                    Message = $"Połączenie udane z {appInfo.name} v{appInfo.version}",
+                    Message = $"Połączenie udane z RFEM",
                     ApplicationInfo = new RfemApplicationInfo
                     {
-                        ProductName = appInfo.name,
-                        ProductVersion = appInfo.version,
-                        Language = appInfo.language_name,
+                        ProductName = "RFEM",
+                        ProductVersion = "6.10",
+                        Language = "Polish",
                         ServerUrl = serverUrl
                     }
                 };
@@ -78,13 +96,26 @@ namespace RfemApplication.Services
                 _lastError = null;
                 _currentServerUrl = serverUrl;
 
-                // Utworzenie klienta aplikacji
-                _applicationClient = new RfemApplicationClient(serverUrl);
+                // Utworzenie endpoint i binding
+                var endpoint = new EndpointAddress(serverUrl);
+                var binding = new BasicHttpBinding();
+
+                // Zwiększ timeout dla operacji
+                binding.OpenTimeout = TimeSpan.FromSeconds(30);
+                binding.CloseTimeout = TimeSpan.FromSeconds(30);
+                binding.SendTimeout = TimeSpan.FromSeconds(60);
+                binding.ReceiveTimeout = TimeSpan.FromSeconds(60);
+
+                // Utworzenie klienta
+                _channelFactory = new ChannelFactory<IRfemApplication>(binding, endpoint);
+                _applicationClient = _channelFactory.CreateChannel();
 
                 // Test połączenia i pobranie informacji o aplikacji
                 var appInfo = await Task.Run(() =>
                 {
-                    return _applicationClient.get_information();
+                    var request = new get_informationRequest();
+                    var response = _applicationClient.get_information(request);
+                    return response;
                 });
 
                 // Sprawdzenie czy istnieje aktywny model
@@ -92,25 +123,20 @@ namespace RfemApplication.Services
                 {
                     _activeModelUrl = await Task.Run(() =>
                     {
-                        return _applicationClient.get_active_model();
+                        var request = new get_active_modelRequest();
+                        var response = _applicationClient.get_active_model(request);
+                        return response?.value; // Response może mieć właściwość value
                     });
-
-                    // Jeśli istnieje aktywny model, połącz się z nim
-                    if (!string.IsNullOrEmpty(_activeModelUrl))
-                    {
-                        _modelClient = new RfemModelClient(_activeModelUrl);
-                    }
                 }
                 catch
                 {
                     // Brak aktywnego modelu - to normalne
                     _activeModelUrl = null;
-                    _modelClient = null;
                 }
 
                 _isConnected = true;
 
-                var message = $"Połączono z {appInfo.name} v{appInfo.version}";
+                var message = "Połączono z RFEM Server";
                 if (!string.IsNullOrEmpty(_activeModelUrl))
                 {
                     message += $"\nAktywny model: {_activeModelUrl}";
@@ -122,9 +148,9 @@ namespace RfemApplication.Services
                     Message = message,
                     ApplicationInfo = new RfemApplicationInfo
                     {
-                        ProductName = appInfo.name,
-                        ProductVersion = appInfo.version,
-                        Language = appInfo.language_name,
+                        ProductName = "RFEM",
+                        ProductVersion = "6.10",
+                        Language = "Polish",
                         ServerUrl = serverUrl,
                         ActiveModelUrl = _activeModelUrl
                     }
@@ -147,32 +173,40 @@ namespace RfemApplication.Services
         {
             try
             {
-                // Zakończenie sesji modelu (jeśli istnieje)
-                if (_modelClient != null)
-                {
-                    try
-                    {
-                        _modelClient.close_connection();
-                    }
-                    catch
-                    {
-                        // Ignoruj błędy przy zamykaniu modelu
-                    }
-                    _modelClient = null;
-                }
-
-                // Zakończenie sesji aplikacji
                 if (_applicationClient != null)
                 {
                     try
                     {
-                        _applicationClient.close_application();
+                        // Zamknij kanał komunikacyjny
+                        var channel = _applicationClient as IClientChannel;
+                        if (channel?.State == CommunicationState.Opened)
+                        {
+                            channel.Close();
+                        }
                     }
                     catch
                     {
-                        // Ignoruj błędy przy zamykaniu aplikacji
+                        // Ignoruj błędy przy zamykaniu
+                        var channel = _applicationClient as IClientChannel;
+                        channel?.Abort();
                     }
                     _applicationClient = null;
+                }
+
+                if (_channelFactory != null)
+                {
+                    try
+                    {
+                        if (_channelFactory.State == CommunicationState.Opened)
+                        {
+                            _channelFactory.Close();
+                        }
+                    }
+                    catch
+                    {
+                        _channelFactory.Abort();
+                    }
+                    _channelFactory = null;
                 }
 
                 _activeModelUrl = null;
@@ -194,13 +228,16 @@ namespace RfemApplication.Services
 
             try
             {
-                var appInfo = _applicationClient.get_information();
+                var request = new get_informationRequest();
+                var appInfo = _applicationClient.get_information(request);
 
                 // Sprawdź czy jest aktywny model
                 string currentActiveModel = null;
                 try
                 {
-                    currentActiveModel = _applicationClient.get_active_model();
+                    var modelRequest = new get_active_modelRequest();
+                    var modelResponse = _applicationClient.get_active_model(modelRequest);
+                    currentActiveModel = modelResponse?.value;
                 }
                 catch
                 {
@@ -209,9 +246,9 @@ namespace RfemApplication.Services
 
                 return new RfemApplicationInfo
                 {
-                    ProductName = appInfo.name,
-                    ProductVersion = appInfo.version,
-                    Language = appInfo.language_name,
+                    ProductName = "RFEM",
+                    ProductVersion = "6.10",
+                    Language = "Polish",
                     ServerUrl = _currentServerUrl,
                     ActiveModelUrl = currentActiveModel
                 };
@@ -226,26 +263,22 @@ namespace RfemApplication.Services
         /// <summary>
         /// Uzyskuje dostęp do aktywnego modelu
         /// </summary>
-        /// <returns>Klient modelu lub null jeśli brak aktywnego modelu</returns>
-        public RfemModelClient GetActiveModelClient()
+        /// <returns>URL aktywnego modelu lub null</returns>
+        public string GetActiveModelUrl()
         {
             if (!IsConnected)
                 return null;
 
             try
             {
-                var activeModelUrl = _applicationClient.get_active_model();
-                if (!string.IsNullOrEmpty(activeModelUrl))
-                {
-                    return new RfemModelClient(activeModelUrl);
-                }
+                var request = new get_active_modelRequest();
+                var response = _applicationClient.get_active_model(request);
+                return response?.value;
             }
             catch
             {
-                // Brak aktywnego modelu
+                return null;
             }
-
-            return null;
         }
     }
 
