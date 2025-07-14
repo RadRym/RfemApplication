@@ -3,40 +3,44 @@
   "WorkspaceRootPath": "E:\\Portfolio\\RfemApplication\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\services\\rfemelementsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:services\\rfemelementsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|E:\\Portfolio\\RfemApplication\\services\\rfemservermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:services\\rfemservermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|E:\\Portfolio\\RfemApplication\\views\\elementsdatagridview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:views\\elementsdatagridview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|E:\\Portfolio\\RfemApplication\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|E:\\Portfolio\\RfemApplication\\services\\rfemconnectionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:services\\rfemconnectionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|E:\\Portfolio\\RfemApplication\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\views\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:views\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\services\\rfemservermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:services\\rfemservermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\converters\\additionalconverters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|E:\\Portfolio\\RfemApplication\\converters\\additionalconverters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:converters\\additionalconverters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\views\\elementsdatagridview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|E:\\Portfolio\\RfemApplication\\views\\elementsdatagridview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:views\\elementsdatagridview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\views\\elementsdatagridview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:views\\elementsdatagridview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\models\\rfemelement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|E:\\Portfolio\\RfemApplication\\models\\rfemelement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:models\\rfemelement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|e:\\portfolio\\rfemapplication\\services\\rfemconnectionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EDAAF3E-09E0-4F25-BE76-7CF406F52F04}|RfemApplication.csproj|solutionrelative:services\\rfemconnectionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,32 +58,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ElementsDataGridView.xaml",
-              "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Views\\ElementsDataGridView.xaml",
-              "RelativeDocumentMoniker": "Views\\ElementsDataGridView.xaml",
-              "ToolTip": "E:\\Portfolio\\RfemApplication\\Views\\ElementsDataGridView.xaml",
-              "RelativeToolTip": "Views\\ElementsDataGridView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-07-13T10:36:17.119Z",
+              "DocumentIndex": 0,
+              "Title": "RfemElementsService.cs",
+              "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Services\\RfemElementsService.cs",
+              "RelativeDocumentMoniker": "Services\\RfemElementsService.cs",
+              "ToolTip": "E:\\Portfolio\\RfemApplication\\Services\\RfemElementsService.cs",
+              "RelativeToolTip": "Services\\RfemElementsService.cs",
+              "ViewState": "AgIAAF0BAAAAAAAAAAAYwGwBAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T16:19:42.778Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\App.xaml.cs",
               "RelativeDocumentMoniker": "App.xaml.cs",
               "ToolTip": "E:\\Portfolio\\RfemApplication\\App.xaml.cs",
               "RelativeToolTip": "App.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-13T09:56:53.38Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Views\\MainWindow.xaml",
               "RelativeDocumentMoniker": "Views\\MainWindow.xaml",
@@ -91,7 +96,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "ElementsDataGridView.xaml.cs",
               "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Views\\ElementsDataGridView.xaml.cs",
               "RelativeDocumentMoniker": "Views\\ElementsDataGridView.xaml.cs",
@@ -104,7 +109,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "RfemServerManager.cs",
               "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Services\\RfemServerManager.cs",
               "RelativeDocumentMoniker": "Services\\RfemServerManager.cs",
@@ -117,7 +122,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "RfemElement.cs",
               "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Models\\RfemElement.cs",
               "RelativeDocumentMoniker": "Models\\RfemElement.cs",
@@ -125,18 +130,17 @@
               "RelativeToolTip": "Models\\RfemElement.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T10:31:05.376Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-13T10:31:05.376Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 4,
               "Title": "RfemConnectionService.cs",
               "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Services\\RfemConnectionService.cs",
               "RelativeDocumentMoniker": "Services\\RfemConnectionService.cs",
               "ToolTip": "E:\\Portfolio\\RfemApplication\\Services\\RfemConnectionService.cs",
               "RelativeToolTip": "Services\\RfemConnectionService.cs",
-              "ViewState": "AgIAAGkAAAAAAAAAAAAvwIIAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAO8AAAAAAAAAAAAqwKUBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-13T09:55:03.01Z",
               "EditorCaption": ""
@@ -149,14 +153,25 @@
               "RelativeDocumentMoniker": "ViewModels\\MainViewModel.cs",
               "ToolTip": "E:\\Portfolio\\RfemApplication\\ViewModels\\MainViewModel.cs",
               "RelativeToolTip": "ViewModels\\MainViewModel.cs",
-              "ViewState": "AgIAACwBAAAAAAAAAAAqwDwBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABwAAAAAAAAAAAAgwLwAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-13T09:41:58.095Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
+              "Title": "ElementsDataGridView.xaml",
+              "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Views\\ElementsDataGridView.xaml",
+              "RelativeDocumentMoniker": "Views\\ElementsDataGridView.xaml",
+              "ToolTip": "E:\\Portfolio\\RfemApplication\\Views\\ElementsDataGridView.xaml",
+              "RelativeToolTip": "Views\\ElementsDataGridView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-07-13T10:36:17.119Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "AdditionalConverters.cs",
               "DocumentMoniker": "E:\\Portfolio\\RfemApplication\\Converters\\AdditionalConverters.cs",
               "RelativeDocumentMoniker": "Converters\\AdditionalConverters.cs",
@@ -164,8 +179,7 @@
               "RelativeToolTip": "Converters\\AdditionalConverters.cs",
               "ViewState": "AgIAAMwAAAAAAAAAAAAQwNcAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T09:41:00.358Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-13T09:41:00.358Z"
             }
           ]
         }

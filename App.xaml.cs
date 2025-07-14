@@ -28,6 +28,7 @@ namespace RfemApplication
             ServiceLocator.Instance.RegisterSingleton<IRfemConnectionService>(new RfemConnectionService());
             ServiceLocator.Instance.RegisterSingleton<IEventAggregator>(new EventAggregator());
             ServiceLocator.Instance.RegisterSingleton<IRfemServerManager>(new RfemServerManager());
+            ServiceLocator.Instance.RegisterSingleton<IRfemElementsService>(new RfemElementsService());
         }
     }
 }

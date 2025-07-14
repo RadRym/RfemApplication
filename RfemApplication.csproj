@@ -73,6 +73,7 @@
     <Compile Include="Services\DialogServices.cs" />
     <Compile Include="Services\EventAggregator.cs" />
     <Compile Include="Services\RfemConnectionService.cs" />
+    <Compile Include="Services\RfemElementsService.cs" />
     <Compile Include="Services\RfemServerManager.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />

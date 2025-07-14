@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RfemApplication"
         xmlns:converters="clr-namespace:RfemApplication.Converters"
         mc:Ignorable="d"
-        Title="RFEM Application - Analiza Konstrukcji" Height="800" Width="1200"
+        Title="RFEM Application - Analiza Konstrukcji" Height="800" Width="1000"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -190,203 +190,168 @@
             </Grid>
         </GroupBox>
 
-        <!-- Main Content Area -->
-        <Grid Grid.Row="2" Margin="10,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="220"/>
-            </Grid.ColumnDefinitions>
+        <!-- Main Content Area - Full Width -->
+        <GroupBox Grid.Row="2" Header="📊 Elementy konstrukcyjne" Margin="10,5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!-- Elements Data Grid (Inline instead of UserControl) -->
-            <GroupBox Grid.Column="0" Header="📊 Elementy konstrukcyjne" Margin="0,0,5,0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                <!-- Search and Actions Panel -->
+                <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="#DEE2E6" BorderThickness="0,0,0,1" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <!-- Search and Actions Panel -->
-                    <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="#DEE2E6" BorderThickness="0,0,0,1" Padding="10">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                        <!-- Search Panel -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <TextBlock Text="🔍" FontSize="16" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Szukaj:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                                     Width="250" Margin="0,0,15,0" 
+                                     ToolTip="Szukaj po ID, materiale, przekroju, typie elementu..."
+                                     Padding="8,5"/>
+                            <TextBlock Text="{Binding FilteredElements.Count, StringFormat='Znaleziono: {0} elementów', Mode=OneWay}" 
+                                       VerticalAlignment="Center" FontStyle="Italic" Foreground="#6C757D"/>
+                        </StackPanel>
 
-                            <!-- Search Panel -->
-                            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                <TextBlock Text="🔍" FontSize="16" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                <TextBlock Text="Szukaj:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold"/>
-                                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
-                                         Width="250" Margin="0,0,15,0" 
-                                         ToolTip="Szukaj po ID, materiale, przekroju, typie elementu..."
-                                         Padding="8,5"/>
-                                <TextBlock Text="{Binding FilteredElements.Count, StringFormat='Znaleziono: {0} elementów', Mode=OneWay}" 
-                                           VerticalAlignment="Center" FontStyle="Italic" Foreground="#6C757D"/>
-                            </StackPanel>
+                        <!-- Action Buttons -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="🔄 Odśwież" Command="{Binding RefreshCommand}" 
+                                    Margin="0,0,8,0" Padding="12,6" Background="#6C757D" Foreground="White"/>
+                            <Button Content="📥 Pobierz z RFEM" Command="{Binding LoadFromRfemCommand}" 
+                                    Background="#007BFF" Foreground="White" Padding="12,6"
+                                    ToolTip="Pobierz elementy z aktywnego modelu RFEM"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-                            <!-- Action Buttons -->
-                            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                <Button Content="🔄 Odśwież" Command="{Binding RefreshCommand}" 
-                                        Margin="0,0,8,0" Padding="12,6" Background="#6C757D" Foreground="White"/>
-                                <Button Content="✓ Zaznacz wszystkie" Command="{Binding SelectAllCommand}" 
-                                        Margin="0,0,8,0" Padding="12,6" Background="#28A745" Foreground="White"/>
-                                <Button Content="📥 Pobierz z RFEM" Command="{Binding LoadFromRfemCommand}" 
-                                        Background="#007BFF" Foreground="White" Padding="12,6"
-                                        ToolTip="Pobierz elementy z aktywnego modelu RFEM"/>
-                            </StackPanel>
-                        </Grid>
+                <!-- Data Grid with Loading Overlay -->
+                <Grid Grid.Row="1">
+                    <!-- Loading Overlay -->
+                    <Border Background="White" Opacity="0.9" 
+                            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Panel.ZIndex="10">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                            <TextBlock Text="Ładowanie danych..." HorizontalAlignment="Center"
+                                       FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Pobieranie elementów z modelu RFEM..." HorizontalAlignment="Center"
+                                       FontSize="14" Foreground="#6C757D"/>
+                            <ProgressBar IsIndeterminate="True" Width="200" Height="6" Margin="0,15,0,0"/>
+                        </StackPanel>
                     </Border>
 
-                    <!-- Data Grid with Loading Overlay -->
-                    <Grid Grid.Row="1">
-                        <!-- Loading Overlay -->
-                        <Border Background="White" Opacity="0.9" 
-                                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Panel.ZIndex="10">
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                                <TextBlock Text="Ładowanie danych..." HorizontalAlignment="Center"
-                                           FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
-                                <TextBlock Text="Pobieranie elementów z modelu RFEM..." HorizontalAlignment="Center"
-                                           FontSize="14" Foreground="#6C757D"/>
-                            </StackPanel>
-                        </Border>
+                    <!-- Main Data Grid -->
+                    <DataGrid ItemsSource="{Binding FilteredElements}"
+                              SelectedItem="{Binding SelectedElement}"
+                              AutoGenerateColumns="False"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column"
+                              AlternatingRowBackground="#F0F8FF"
+                              CanUserDeleteRows="False"
+                              CanUserAddRows="False"
+                              SelectionMode="Single"
+                              RowHeaderWidth="0"
+                              Margin="0">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#E6F3FF"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Padding" Value="8,5"/>
+                                <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Padding" Value="2"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#4A90E2"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#E3F2FD"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <!-- Selection Column -->
+                            <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Width="40">
+                                <DataGridCheckBoxColumn.Header>
+                                    <TextBlock Text="✓" ToolTip="Zaznacz element"/>
+                                </DataGridCheckBoxColumn.Header>
+                            </DataGridCheckBoxColumn>
 
-                        <!-- Main Data Grid -->
-                        <DataGrid ItemsSource="{Binding FilteredElements}"
-                                  SelectedItem="{Binding SelectedElement}"
-                                  AutoGenerateColumns="False"
-                                  GridLinesVisibility="Horizontal"
-                                  HeadersVisibility="Column"
-                                  AlternatingRowBackground="#F0F8FF"
-                                  CanUserDeleteRows="False"
-                                  CanUserAddRows="False"
-                                  SelectionMode="Single"
-                                  RowHeaderWidth="0"
-                                  Margin="0">
-                            <DataGrid.Columns>
-                                <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Header="✓" Width="40"/>
-                                <DataGridTextColumn Binding="{Binding ID}" Header="ID" Width="60"/>
-                                <DataGridTextColumn Binding="{Binding ElementType}" Header="Typ" Width="80"/>
-                                <DataGridTextColumn Binding="{Binding Length, StringFormat={}{0:F2} m}" Header="Długość" Width="85"/>
-                                <DataGridTextColumn Binding="{Binding CrossSection}" Header="Przekrój" Width="120"/>
-                                <DataGridTextColumn Binding="{Binding Material}" Header="Materiał" Width="80"/>
-                                <DataGridTextColumn Binding="{Binding NodeConnection}" Header="Węzły" Width="100"/>
-                                <DataGridTextColumn Binding="{Binding LoadCase}" Header="Przypadek" Width="140"/>
-                                <DataGridTextColumn Binding="{Binding AxialForce, StringFormat={}{0:F1} kN}" Header="N [kN]" Width="80"/>
-                                <DataGridTextColumn Binding="{Binding ShearForce, StringFormat={}{0:F1} kN}" Header="V [kN]" Width="80"/>
-                                <DataGridTextColumn Binding="{Binding BendingMoment, StringFormat={}{0:F1} kNm}" Header="M [kNm]" Width="90"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
+                            <!-- ID Column -->
+                            <DataGridTextColumn Binding="{Binding ID}" Header="ID" Width="80" SortDirection="Ascending">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <!-- Element Type Column -->
+                            <DataGridTextColumn Binding="{Binding ElementType}" Header="Typ" Width="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="Beam">
+                                                <Setter Property="Foreground" Value="#2E7D32"/>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="Column">
+                                                <Setter Property="Foreground" Value="#1976D2"/>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="Truss">
+                                                <Setter Property="Foreground" Value="#F57C00"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <!-- Length Column -->
+                            <DataGridTextColumn Binding="{Binding Length, StringFormat={}{0:F2} m}" Header="Długość [m]" Width="120">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="Padding" Value="0,0,8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <!-- Cross Section Column -->
+                            <DataGridTextColumn Binding="{Binding CrossSection}" Header="Przekrój" Width="150">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontFamily" Value="Consolas"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <!-- Material Column -->
+                            <DataGridTextColumn Binding="{Binding Material}" Header="Materiał" Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
-            </GroupBox>
-
-            <!-- Action Panel -->
-            <GroupBox Grid.Column="1" Header="⚙ Panel akcji">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="5">
-                        <!-- Element Actions -->
-                        <TextBlock Text="Zarządzanie elementami:" FontWeight="Bold" Margin="0,0,0,5"/>
-                        <Button Content="➕ Dodaj element" Command="{Binding AddElementCommand}" Background="#28A745" Foreground="White"/>
-                        <Button Content="🗑 Usuń element" Command="{Binding DeleteElementCommand}" Background="#DC3545" Foreground="White"/>
-
-                        <Separator Margin="0,10"/>
-
-                        <!-- RFEM Actions -->
-                        <TextBlock Text="Akcje RFEM:" FontWeight="Bold" Margin="0,0,0,5"/>
-                        <Button Content="ℹ Info o RFEM" Command="{Binding RfemConnectionViewModel.ShowApplicationInfoCommand}" 
-                                Background="#17A2B8" Foreground="White"/>
-
-                        <Separator Margin="0,10"/>
-
-                        <!-- Model Information -->
-                        <TextBlock Text="Informacje o modelu:" FontWeight="Bold" Margin="0,5,0,5"/>
-                        <Border BorderBrush="#DEE2E6" BorderThickness="1" Padding="8" Background="#F8F9FA">
-                            <StackPanel>
-                                <TextBlock Text="{Binding FilteredElements.Count, StringFormat='Elementów: {0}', Mode=OneWay}" 
-                                           Margin="0,2" FontSize="12"/>
-                                <TextBlock Text="{Binding RfemConnectionViewModel.ApplicationInfo}" 
-                                           TextWrapping="Wrap" FontSize="10" Foreground="Gray" Margin="0,2"/>
-                            </StackPanel>
-                        </Border>
-
-                        <Separator Margin="0,10"/>
-
-                        <!-- Selected Element Details -->
-                        <TextBlock Text="Wybrany element:" FontWeight="Bold" Margin="0,5,0,5"/>
-
-                        <!-- When Element is Selected -->
-                        <Border BorderBrush="#007BFF" BorderThickness="2" Padding="8" Margin="0,2" Background="#E3F2FD">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedElement, Converter={StaticResource NullToBooleanConverter}}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <StackPanel>
-                                <TextBlock Text="{Binding SelectedElement.Description}" 
-                                           TextWrapping="Wrap" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
-                                <TextBlock Text="{Binding SelectedElement.NodeConnection, StringFormat='Węzły: {0}'}" 
-                                           FontSize="10" Margin="0,1"/>
-                                <TextBlock Text="{Binding SelectedElement.Length, StringFormat='Długość: {0:F2} m'}" 
-                                           FontSize="10" Margin="0,1"/>
-                                <TextBlock Text="{Binding SelectedElement.LoadCase, StringFormat='Przypadek: {0}'}" 
-                                           FontSize="10" Margin="0,1"/>
-                                <Separator Margin="0,4"/>
-                                <TextBlock Text="Siły wewnętrzne:" FontWeight="Bold" FontSize="10" Margin="0,2"/>
-                                <TextBlock Text="{Binding SelectedElement.ForcesSummary}" 
-                                           TextWrapping="Wrap" FontSize="10" Foreground="#1976D2" 
-                                           Margin="0,1,0,0" FontFamily="Consolas"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- When No Element Selected -->
-                        <Border BorderBrush="#6C757D" BorderThickness="1" Padding="8" Margin="0,2" Background="#F8F9FA">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedElement, Converter={StaticResource NullToBooleanConverter}}" Value="True">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <TextBlock Text="Brak zaznaczonego elementu" 
-                                       FontStyle="Italic" Foreground="#6C757D" FontSize="11" 
-                                       HorizontalAlignment="Center"/>
-                        </Border>
-
-                        <Separator Margin="0,10"/>
-
-                        <!-- Quick Stats -->
-                        <TextBlock Text="Statystyki:" FontWeight="Bold" Margin="0,5,0,5"/>
-                        <Border BorderBrush="#28A745" BorderThickness="1" Padding="6" Background="#E8F5E8">
-                            <StackPanel>
-                                <TextBlock FontSize="10" Margin="0,1">
-                                    <Run Text="Belki: "/>
-                                    <Run Text="{Binding Elements.Count, Mode=OneWay}" FontWeight="Bold"/>
-                                </TextBlock>
-                                <TextBlock FontSize="10" Margin="0,1">
-                                    <Run Text="Słupy: "/>
-                                    <Run Text="0" FontWeight="Bold"/>
-                                </TextBlock>
-                                <TextBlock FontSize="10" Margin="0,1">
-                                    <Run Text="Kraty: "/>
-                                    <Run Text="0" FontWeight="Bold"/>
-                                </TextBlock>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </ScrollViewer>
-            </GroupBox>
-        </Grid>
+            </Grid>
+        </GroupBox>
 
         <!-- Status Bar -->
         <StatusBar Grid.Row="3" Background="#343A40" Foreground="White">
